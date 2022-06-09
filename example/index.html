@@ -8,10 +8,14 @@
 </head>
 <body>
     <script type="module">
-      import App, { LoginPage, isEmtry } from '../dist/rollup-bundler-template.es.js'
+      import App, { LoginPage, isEmtry, bigNumberAdd } from '../dist/rollup-bundler-template.es.js'
       const login = new LoginPage()
+      window.login = login
       login.toLogin("小明...")
       console.log(isEmtry(''), isEmtry(222))
+
+      const total = bigNumberAdd("00000000000000000001010", "000000011")
+      console.log(total)
     </script>
 </body>
 </html>
