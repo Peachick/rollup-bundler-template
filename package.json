@@ -1,0 +1,49 @@
+{
+  "name": "rollup-bundler-template",
+  "version": "1.0.0",
+  "description": "This is a rollup bundler that provides packaged generic thrid-party libraries or components",
+  "license": "MIT",
+  "private": false,
+  "unpkg": "dist/rollup-bundler-template.umd.js",
+  "jsdelivr": "dist/rollup-bundler-template.umd.js",
+  "main": "dist/rollup-bundler-template.common.js",
+  "module": "dist/rollup-bundler-template.es.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/**/*"
+  ],
+  "scripts": {
+    "predev": "rimraf dist",
+    "dev": "rollup -w -c scripts/config.js --environment TARGET:es",
+    "prebuild": "rimraf dist && tsc -p ./tsconfig.type.json",
+    "build": "node scripts/build.js"
+  },
+  "author": {
+    "name": "Peachick",
+    "email": "wsm_1105@163.com",
+    "url": "https://github.com/Peachick"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Peachick/rollup-bundler-template.git"
+  },
+  "homepage": "https://github.com/Peachick/rollup-bundler-template",
+  "bugs": {
+    "url": "https://github.com/Peachick/rollup-bundler-template/issues"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.41",
+    "prettier": "^2.6.2",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.75.6",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-replace": "^2.2.0",
+    "rollup-plugin-serve": "^1.1.0",
+    "rollup-plugin-typescript2": "^0.32.1",
+    "typescript": "^4.7.3"
+  },
+  "dependencies": {
+    "reflect-metadata": "^0.1.13"
+  }
+}
