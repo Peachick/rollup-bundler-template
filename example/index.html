@@ -7,8 +7,13 @@
     <title>Document</title>
 </head>
 <body>
+    <h3>start</h3>
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <input type="text" id="input">
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <h3>end</h3>
     <script type="module">
-      import App, { LoginPage, UserPage, isEmtry, bigNumberAdd } from '../dist/rollup-bundler-template.es.js'
+      import App, { LoginPage, UserPage, isEmtry, bigNumberAdd, throttle, debounce } from '../dist/rollup-bundler-template.es.js'
       const login = new LoginPage()
       window.login = login
       login.toLogin("小明...")
@@ -21,6 +26,15 @@
       const userPage = new UserPage();
       const rs = await userPage.getUser()
       console.log(rs)
+
+      window.addEventListener("scroll", throttle((e) => {
+        console.log(e)
+      }, 1000))
+
+      const Input = document.querySelector("#input");
+      Input.addEventListener("input", debounce((e) => {
+        console.log(e.target.value)
+      }, 1000))
     </script>
 </body>
 </html>
