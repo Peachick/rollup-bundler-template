@@ -20,6 +20,18 @@ function logger(target: object, key: string, descriptor: PropertyDescriptor) {
     }
 }
 
+const services: Map<Constructor, Constructor> = new Map();
+type Constructor = { new (...args: any): any }
+function Inject<T extends Constructor>(target: T) {
+  services.set(target, target);
+}
+
+function Service(target: Record<string|symbol, any>, key: string | symbol) {
+  const service = services?.get(Reflect.getMetadata("design:type", target, key));
+  service && (target[key] = new service());
+}
+
+@Inject
 class LoginService {
   @logger
   postLogin(username: string) {
@@ -38,21 +50,47 @@ class LoginService {
   }
 }
 
-function Service(target: any, key: string) {
-  target[key] = new (Reflect.getMetadata("design:type", target, key))
-}
-
 class LoginPage {
   @Service
   public service: LoginService;
 
   public toLogin(username: string) {
-    this.service.postLogin(username)
+    this.service?.postLogin(username)
   }
 }
 
 export {
     app,
     LoginPage,
+    UserPage,
     isEmtry
 }
+
+// 用户相关接口
+@Inject
+class UserService {
+  public getUser() {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve({
+          name: "张三",
+          age: 18,
+          address: "北京",
+          phone: "123456789",
+          email: "zhangsan@qq.com"
+        })
+      }, 2000)
+    })
+  }
+}
+
+class UserPage {
+  @Service
+  public service: UserService;
+
+  public getUser() {
+    console.log(this.service)
+    return this.service?.getUser()
+  }
+}
+
