@@ -13,28 +13,34 @@
     <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
     <h3>end</h3>
     <script type="module">
-      import App, { LoginPage, UserPage, isEmtry, bigNumberAdd, throttle, debounce } from '../dist/rollup-bundler-template.es.js'
+      import { LoginPage, UserPage, People, isEmtry, bigNumberAdd, throttle, debounce } from '../dist/rollup-bundler-template.es.js'
       const login = new LoginPage()
       window.login = login
-      login.toLogin("小明...")
-      console.log(isEmtry(''), isEmtry(222))
+      window.People = People
+      // login.BASE_URL = "https://www.google.com"
+      // console.log(login.BASE_URL)
 
-      const total = bigNumberAdd("00000000000000000001010", "000000011")
-      console.log(total)
+      // window.login = login
+      // const rs = await login.toLogin("Mr Ming")
+      // console.log(rs)
+      // console.log(isEmtry(''), isEmtry(222))
+
+      // const total = bigNumberAdd("00000000000000000001010", "000000011")
+      // console.log(total)
 
 
-      const userPage = new UserPage();
-      const rs = await userPage.getUser()
-      console.log(rs)
+      // const userPage = new UserPage();
+      // const rs = await userPage.getUser()
+      // console.log(rs)
 
-      window.addEventListener("scroll", throttle((e) => {
-        console.log(e)
-      }, 1000))
+      // window.addEventListener("scroll", throttle((e) => {
+      //   console.log(e)
+      // }, 1000))
 
-      const Input = document.querySelector("#input");
-      Input.addEventListener("input", debounce((e) => {
-        console.log(e.target.value)
-      }, 1000))
+      // const Input = document.querySelector("#input");
+      // Input.addEventListener("input", debounce((e) => {
+      //   console.log(e.target.value)
+      // }, 1000))
     </script>
 </body>
 </html>
