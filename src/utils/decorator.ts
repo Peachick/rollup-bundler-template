@@ -35,7 +35,7 @@ function logger(target: object, key: string, descriptor: PropertyDescriptor) {
 // 私有属性装饰器
 function toPrivate(target: object, key: string) {
   let _val: any = undefined;
-  Object.defineProperty(target, key, {
+  Reflect.defineProperty(target, key, {
     enumerable: false,
     configurable: false,
     get() {
@@ -50,7 +50,7 @@ function toPrivate(target: object, key: string) {
 // 常量装饰器
 function constant(value: any) {
   return function (target: object, key: string) {
-    Object.defineProperty(target, key, {
+    Reflect.defineProperty(target, key, {
       enumerable: false,
       configurable: false,
       get() {

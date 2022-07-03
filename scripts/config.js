@@ -16,69 +16,69 @@ const banner = `/*!
  */`
 
 const builds = {
-    "es": {
-        input: resolvePath("src/index.ts"),
-        dest: resolvePath(`dist/${pkg.name}.es.js`),
-        format: "es",
-        banner,
-        name: scheme
-    },
-    "umd": {
-        input: resolvePath("src/index.ts"),
-        dest: resolvePath(`dist/${pkg.name}.umd.js`),
-        format: "umd",
-        banner,
-        name: scheme
-    },
-    "cjs": {
-        input: resolvePath("src/index.ts"),
-        dest: resolvePath(`dist/${pkg.name}.common.js`),
-        format: "commonjs",
-        banner,
-        name: scheme
-    }
+  "es": {
+    input: resolvePath("src/index.ts"),
+    dest: resolvePath(`dist/${pkg.name}.es.js`),
+    format: "es",
+    banner,
+    name: scheme
+  },
+  "umd": {
+    input: resolvePath("src/index.ts"),
+    dest: resolvePath(`dist/${pkg.name}.umd.js`),
+    format: "umd",
+    banner,
+    name: scheme
+  },
+  "cjs": {
+    input: resolvePath("src/index.ts"),
+    dest: resolvePath(`dist/${pkg.name}.common.js`),
+    format: "commonjs",
+    banner,
+    name: scheme
+  }
 }
 
 function getConfig(name) {
-    const opts = builds[name]
-    const config = {
-        input: opts.input,
-        external: opts.external,
-        plugins: [
-            replace({
-                __VERSION__: pkg.version
-            }),
-            commonjs(),
-            nodeResolve({
-              extensions: ['.js', '.ts'],
-            }),
-            typescript({
-                exclude: "node_modules/**",
-            }),
-        ],
-        output: {
-            file: opts.dest,
-            format: opts.format,
-            banner: opts.banner,
-            name: opts.name,
-            exports: "named"
-        }
+  const opts = builds[name]
+  const config = {
+    input: opts.input,
+    external: opts.external,
+    plugins: [
+      replace({
+        __VERSION__: pkg.version
+      }),
+      commonjs(),
+      nodeResolve({
+        extensions: ['.js', '.ts'],
+      }),
+      typescript({
+        exclude: "node_modules/**",
+      }),
+    ],
+    output: {
+      file: opts.dest,
+      format: opts.format,
+      banner: opts.banner,
+      name: opts.name,
+      exports: "named"
     }
-    if (process.env.TARGET) {
-        config.plugins.push(serve({
-            open: true,
-            openPage: '/example/index.html',
-            port: 8989,
-            contentBase: ''
-        }))
-    }
-    return config
+  }
+  if (process.env.TARGET) {
+    config.plugins.push(serve({
+      open: true,
+      openPage: '/example/index.html',
+      port: 8989,
+      contentBase: ''
+    }))
+  }
+  return config
 }
 
 
 if (process.env.TARGET) {
-    module.exports = getConfig(process.env.TARGET)
+  module.exports = getConfig(process.env.TARGET)
 } else {
-    exports.getAllBuilds = () => Object.keys(builds).map(getConfig)
-    exports.resolvePath = resolvePath
+  exports.getAllBuilds = () => Object.keys(builds).map(getConfig)
+  exports.resolvePath = resolvePath
 }
