@@ -177,7 +177,7 @@ class LoginPage {
   }
 
   @validator
-  public async toLogin(username: string) {
+  public async toLogin(@isString username: string) {
     return await this.service?.postLogin(username as unknown as string);
   }
 }
@@ -215,9 +215,9 @@ class UserPage {
  */
 // 记录
 function trace(key: string): any {
-  console.log('evaluate: \t', key);
+  // console.log('evaluate: \t', key);
   return function () {
-    console.log('call: \t\t', key);
+    // console.log('call: \t\t', key);
   };
 }
 

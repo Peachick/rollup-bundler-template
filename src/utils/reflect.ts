@@ -26,7 +26,7 @@ export function boostrapReflect() {
       return this.lastname + ' ' + this.firstname;
     },
     [level]: 'A',
-    introduce(orther?: any) {
+    introduce(orther?: any): string {
       return `I'm ${this.firstname}, ${this.age} age, ${orther}.`;
     },
   };
@@ -119,18 +119,92 @@ export function boostrapReflect() {
   // 13.ownKeys[target] => Object.getOwnPropertyNames与Object.getOwnPropertySymbols之和
   log('ownKeys', Reflect.ownKeys(user));
 
-  console.log(`\n\n以上是原生静态方法\n\n`);
+  console.log(`\n\nAbove is the es7 syntax\n\n`);
 
   /**
    * reflect-metadata方法
+   *  1. metadata: 在类的所有装饰器使用（定义元数据）
+   *  2. defineMetadata: 定义对象或属性的元数据
+   *  3. getMetadata: 获取对象或属性上定义的元数据
+   *  4. hasMetadata: 检查对象或属性上的元数据键是否存在 （会找原型链）
+   *  5. hasOwnMetadata: 判断对象或属性本身 元数据键是否存在
+   *  6. getOwnMetadata: 获取对象或属性自身上的元数据
+   *  7. getMetadataKeys: 获取对象或属性上的元数据键
+   *  8. getOwnMetadataKeys: 获取对象或属性自身上的元数据键
+   *  9. deleteMetadata: 删除对象或属性上的元数据
+   *
+   *  getMetadata的参数：'design:type', 'design:paramtypes', 'design:returntype'只能在类中使用
    */
-  // 1.(key, val, target) => void
-  Reflect.defineMetadata('animal', ['cat', 'dog'], user);
-  // 2.(key, target) => any
+  const classDecorator = Symbol('classDecorator');
+  // 返回类型装饰器
+  function returnTypeDecorator(target: any, prop: string, value: PropertyDescriptor) {
+    const returnType = Reflect.getMetadata('design:returntype', target, prop);
+    const type = String(returnType).match(/function (\w+)/i)?.[1]?.toLowerCase() || undefined;
+    console.log('return type: ', type);
+  }
+  // 参数装饰器
+  function paramTypesDecorator(target: any, prop: string, descriptor: PropertyDescriptor) {
+    // 获取当前方法所有参数的类型
+    const paramTypes: Function[] = Reflect.getMetadata('design:paramtypes', target, prop);
+    console.log('paramtypes: ', getTypes(paramTypes));
+
+    function getTypes(types: Function[]) {
+      return types.map(type => String(type).match(/function (\w+)/i)?.[1]?.toLowerCase() || undefined);
+    }
+  }
+  // 属性装饰器
+  function propertyDecorator(target: Record<string|symbol, any>, prop: string | symbol) {
+    const propertyType = Reflect.getMetadata('design:type', target, prop);
+    console.log(propertyType);
+    console.log('propertytype: ', String(propertyType).match(/function (\w+)/i)?.[1]?.toLowerCase() || undefined);
+  }
+  @Reflect.metadata(classDecorator, 'class value')
+  class TestDemo {
+    @propertyDecorator
+    _timer: TestDemo;
+
+    @returnTypeDecorator
+    @paramTypesDecorator
+    introduce(name?: string, age?: number, crt?: Symbol, func?: Function, bool?: boolean, list?: number[]): string {
+      return name;
+    };
+  }
+  // 1.defineMetadata (key, val, target) => void 定义元数据
+  Reflect.defineMetadata('animal', ['cat', 'dog'], user);  // user 自身上定义元数据
+  Reflect.defineMetadata('fruit', ['apple', 'banana', 'watermelon'], Reflect.getPrototypeOf(user)); // user 原型上定义元数据
+
+  // 2.getMetadata (key, target) => any 获取元数据
   const d1 = Reflect.getMetadata('animal', user);
-  log('getMetadata', d1);
+  const d2 = Reflect.getMetadata('fruit', user);
+  log('getMetadata (获取defineMetadata的值)', d1);
+  log('getMetadata (获取defineMetadata的值(原型))', d2);
   log(
-    'getMetadata',
-    Reflect.getMetadata('design:paramtypes', user, 'introduce'),
+    'getMetadata (@Reflect.metadata[target, value])',
+    Reflect.getMetadata(classDecorator, TestDemo),
   );
+  log(
+    'getMetadata (design:returntype只能用在类的装饰器中)',
+    Reflect.getMetadata('design:returntype', user, 'introduce'),
+  );
+
+  // 3.hasMetadata (key, target) => boolean 检查元数据键是否存在
+  log('hasMetadata', Reflect.hasMetadata('animal', user));
+
+  // 4.hasOwnMetadata (key, target) => boolean 检查对象或属性自身上的元数据键是否存在
+  log('hasOwnMetadata (hasOwnMetadata获取对象本身上定义的元数据)', Reflect.hasOwnMetadata('animal', user));
+  log('hasOwnMetadata (hasOwnMetadata获取对象本身上定义的元数据)', Reflect.hasOwnMetadata('fruit', user));
+
+  // 5.getOwnMetadata (key, target) => any 获取对象或属性上自身的元数据
+  log('getOwnMetadata (animal定义在自身上)', Reflect.getOwnMetadata('animal', user));
+  log('getOwnMetadata (fruit定义在原型上获取不到)', Reflect.getOwnMetadata('fruit', user));
+
+  // 6.getMetadataKeys (target) => Array 获取对象或属性上定义的元数据键
+  log('getMetadataKeys (获取对象或属性上定义的元数据键)', Reflect.getMetadataKeys(user));
+
+  // 7.getOwnMetadataKeys (target) => Array 获取对象或属性自身上定义的元数据键
+  log('getOwnMetadataKeys (获取对象或属性自身上定义的元数据键)', Reflect.getOwnMetadataKeys(user));
+
+  // 8.deleteMetadata (key, target) => boolean 删除对象或属性上定义的元数据
+  log('deleteMetadata (删除对象或属性上定义的元数据 animal)', Reflect.deleteMetadata('animal', user));
+  log('getMetadata (重新获取被删除的元数据 animal)', Reflect.getMetadata('animal', user));
 }
