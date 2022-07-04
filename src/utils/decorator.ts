@@ -136,7 +136,7 @@ function validator(
 @Inject
 class LoginService {
   @logger
-  async postLogin(username: string) {
+  async postLogin(username: string): Promise<any> {
     const time = Math.floor(Math.random() * 10 * 1000);
     const rs = await new Promise((resolve, reject) => {
       setTimeout(() => {

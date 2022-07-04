@@ -4,6 +4,7 @@ const commonjs = require("rollup-plugin-commonjs")
 const nodeResolve = require("rollup-plugin-node-resolve")
 const typescript = require("rollup-plugin-typescript2")
 const serve = require("rollup-plugin-serve")
+const livereload = require("rollup-plugin-livereload")
 const pkg = require("../package.json")
 
 const resolvePath = (...dir) => path.resolve(__dirname, "../", ...dir)
@@ -65,12 +66,12 @@ function getConfig(name) {
     }
   }
   if (process.env.TARGET) {
-    config.plugins.push(serve({
+    config.plugins.push(...[serve({
       open: true,
-      openPage: '/example/index.html',
+      openPage: '/example/',
       port: 8989,
-      contentBase: ''
-    }))
+      contentBase: '',
+    }), livereload()])
   }
   return config
 }
