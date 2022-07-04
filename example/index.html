@@ -13,13 +13,25 @@
     <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
     <h3>end</h3>
     <script type="module">
-      import { LoginPage, UserPage, People, isEmtry, bigNumberAdd, throttle, debounce, boostrapReflect } from '../dist/rollup-bundler-template.es.js'
+      import {
+        LoginPage,
+        UserPage,
+        People,
+        isEmtry,
+        bigNumberAdd,
+        throttle,
+        debounce,
+        bootstrapReflect,
+        bootstrapProxy
+      } from '../dist/rollup-bundler-template.es.js'
       const login = new LoginPage()
       window.login = login
       window.People = People
       // login.BASE_URL = "https://www.google.com"
       // console.log(login.BASE_URL)
-      boostrapReflect();
+      // boostrapReflect();
+
+      bootstrapProxy();
 
       // window.login = login
       // const rs = await login.toLogin("Mr Ming")

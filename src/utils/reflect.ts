@@ -12,7 +12,7 @@
  */
 import 'reflect-metadata';
 
-export function boostrapReflect() {
+export function bootstrapReflect() {
   const log = (t: string, ...args: any) =>
     console.log(`Reflect ${t}: `, ...args);
 
