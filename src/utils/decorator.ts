@@ -91,7 +91,7 @@ const typeDecoratorFactory =
     targetValidators[idx] = validator;
     validatorStorage[prop] = targetValidators;
   };
-const isString = typeDecoratorFactory((str: any) => str?.name === 'Mr Ming');
+const isString = typeDecoratorFactory((str: any) => typeof str === "string");
 // 源验证器或自定义参数验证器
 function validator(
   target: object,
