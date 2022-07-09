@@ -1,6 +1,5 @@
 {
   "presets": [
-    "@babel/preset-flow",
     "@babel/preset-typescript",
     [
       "@babel/preset-env",
@@ -20,10 +19,10 @@
       }
     ]
   ],
-	"plugins": [
+  "plugins": [
     "babel-plugin-transform-eval",
     ["@babel/plugin-proposal-decorators", { "legacy": true }],
     ["@babel/plugin-proposal-class-properties", { "loose": true }],
-		"@babel/plugin-transform-runtime"
+    "@babel/plugin-transform-runtime"
   ]
 }

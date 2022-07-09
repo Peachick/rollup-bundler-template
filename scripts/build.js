@@ -1,33 +1,28 @@
-const rollup = require('rollup')
-const { getAllBuilds, resolvePath } = require("./config.js")
+import { builds, getConfig } from './config';
+import { terser } from 'rollup-plugin-terser';
+import babel from '@rollup/plugin-babel'
 
-const allBuilds = getAllBuilds()
+const buildConfigs = [];
 
-function build(builds) {
-    let built = 0
-    const total = builds.length
-    const next = () => {
-      buildEntry(builds[built])
-        .then(() => {
-          built++
-          if (built < total) {
-            next()
-          }
-        })
-        .catch(logError)
-    }
-    next()
-}
+Object.keys(builds).forEach((type) => {
+  const config = getConfig(type);
+  const {
+    output: { file },
+    plugins,
+  } = config;
+  config.plugins.push(babel({
+    babelHelpers: 'bundled',
+    exclude: 'node_modules/**',
+  }));
+  const minConfig = {
+    ...config,
+    output: {
+      ...config.output,
+      file: file.replace(/\.js$/, '.min.js'),
+    },
+    plugins: [...plugins, terser()],
+  };
+  buildConfigs.push(config, minConfig);
+});
 
-build(allBuilds)
-
-function buildEntry (config) {
-  const output = config.output
-  return rollup.rollup(config)
-    .then(bundle => bundle.write(output))
-}
-
-function logError (e) {
-  console.log(e)
-}
-
+export default buildConfigs;

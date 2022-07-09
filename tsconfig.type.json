@@ -1,8 +1,11 @@
 {
-    "compilerOptions": {
-        "declaration": true,
-        "declarationDir": "./types",
-        "emitDeclarationOnly": true,
-        "experimentalDecorators": true
-    }
+  "compilerOptions": {
+    "removeComments": false,
+    "target": "es5",
+    "declaration": true,
+    "declarationDir": "dist",
+    "emitDeclarationOnly": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true
+  }
 }
